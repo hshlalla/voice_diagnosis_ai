@@ -1,0 +1,9 @@
+Release 0.0.001
+- Wrapped the diagnostic service with try-catch.
+- Implemented return handling in the diagnostic service.
+- Modified the diagnostic response format.
+- Applied the model to derive a single result.
+- Responded with diagnostic probability as a percentage rounded to one decimal place.
+- diagnosis.py complete
+
+
