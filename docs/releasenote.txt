@@ -6,4 +6,16 @@ Release 0.0.001
 - Responded with diagnostic probability as a percentage rounded to one decimal place.
 - diagnosis.py complete
 
+Release 0.0.002
+- Created a folder for the trained model.
+- Added a 'train' folder and moved training-related code.
+- Built a Flask server for API integration.
+- Removed rescale_score.
+- Updated mel.py to work in real-time with the API.
+- Designed a Bootstrap front page with a popup triggered by the "Start" button.
+- Upgraded librosa to fix errors.
+- Added model folder to .gitignore to prevent large file uploads.
+- Developed a Flask web API.
 
+
+Release 0.0.003
