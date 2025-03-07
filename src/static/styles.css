@@ -11131,6 +11131,135 @@ body {
 }
 
 
+.appHeader {
+  height: calc(var(--vh, 1vh) * 10);
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  text-align: center;
+  top: env(safe-area-inset-top);
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E5E5E5;
+  padding: 0 calc(var(--bs-gutter-x) * 1.5);
+}
+
+.appHeader:before {
+  content: "";
+  height: env(safe-area-inset-top);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 9999;
+  background: #60B8FB;
+}
+.appHeader .start,
+.appHeader .end {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.appHeader .start .btn.headerButton,
+.appHeader .end .btn.headerButton {
+  min-width: 36px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2.1875rem;
+  color: #000000;
+  position: relative;
+}
+.appHeader .start .btn.headerButton .btn,
+.appHeader .end .btn.headerButton .btn {
+  font-size: 1.3125rem;
+  height: 4.375rem;
+  padding: 0px 1.875rem;
+  font-weight: 400;
+}
+.appHeader .start .btn.headerButton:active,
+.appHeader .end .btn.headerButton:active {
+  opacity: 0.6;
+}
+.appHeader .start .btn + .btn,
+.appHeader .end .btn + .btn {
+  margin-left: 15px;
+}
+.appHeader .start .btn.goBack, .appHeader .start .btn.settingPopBtutton,
+.appHeader .end .btn.goBack,
+.appHeader .end .btn.settingPopBtutton {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+}
+.appHeader .start .btn.goBack svg, .appHeader .start .btn.settingPopBtutton svg,
+.appHeader .end .btn.goBack svg,
+.appHeader .end .btn.settingPopBtutton svg {
+  width: 35px;
+  height: 35px;
+}
+.appHeader .start .btn.closeButton,
+.appHeader .end .btn.closeButton {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+}
+.appHeader .start .btn.closeButton svg,
+.appHeader .end .btn.closeButton svg {
+  width: 45px;
+  height: 45px;
+}
+.appHeader .start h1 {
+  font-size: 2.25rem;
+  color: #000000;
+  font-weight: 700;
+}
+.appHeader .end {
+  justify-content: flex-end;
+}
+.appHeader .end h3.user {
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.5rem;
+}
+.appHeader .pageTitle {
+  text-align: center;
+  font-size: 2.25rem;
+  color: #000000;
+  font-weight: 400;
+}
+.appHeader .pageTitle h1 {
+  margin-bottom: 0;
+}
+
+.appContainer {
+  padding: calc(var(--vh, 1vh) * 10) 0 0 0;
+  height: 100%;
+  margin-bottom: env(safe-area-inset-bottom);
+  margin-top: env(safe-area-inset-top);
+}
+.appContainer.bg {
+  background: #F5F6F9;
+  padding: 0;
+}
+.appContainer.bg .section:first-child {
+  padding-top: calc(var(--vh, 1vh) * 10);
+}
+
+.section {
+  display: block;
+  width: 100%;
+}
+.section.h30p {
+  height: 30%;
+}
+
+
 @media (min-width: 992px) {
   .portfolio-item {
     max-width: none;

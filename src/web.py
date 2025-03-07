@@ -52,6 +52,10 @@ def notEmptyValidate(obj, params): # 필수체크 루틴
 def home():
     return render_template('index.html')  # 웹페이지 렌더링
 
+@app.route('/test_result')
+def test_result():
+    return render_template('test_result.html')
+
 @app.route('/mel', methods=['POST'])
 @as_json
 def request_mel():

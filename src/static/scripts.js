@@ -89,8 +89,6 @@ function handleFiles(input) {
         filePreview.appendChild(listItem);
     }
 }
-
-// 파일 업로드 및 서버 전송
 async function uploadFiles() {
     const input = document.getElementById("fileInput");
     const fileList = input.files;
@@ -106,18 +104,36 @@ async function uploadFiles() {
     }
 
     try {
-        const response = await fetch("/diagnosis", {
+        // Step 1: 먼저 /mel API 호출
+        const melResponse = await fetch("/mel", {
+            method: "POST",
+            body: JSON.stringify({ filePath: "some_path", step: 1 }), // 필요한 데이터 추가
+            headers: { "Content-Type": "application/json" }
+        });
+
+        const melResult = await melResponse.json();
+        console.log("MEL Result:", melResult);
+
+        if (melResult.resultCode !== "0000") {
+            alert("Error in MEL processing");
+            return;
+        }
+
+        // Step 2: MEL 완료 후 /diagnosis API 호출
+        const diagnosisResponse = await fetch("/diagnosis", {
             method: "POST",
             body: formData
         });
 
-        const result = await response.json();
-        document.getElementById("result").innerText = JSON.stringify(result, null, 2);
+        const diagnosisResult = await diagnosisResponse.json();
+        document.getElementById("result").innerText = JSON.stringify(diagnosisResult, null, 2);
+
     } catch (error) {
         console.error("Error:", error);
-        alert("An error occurred while uploading.");
+        alert("An error occurred during processing.");
     }
 }
+
 
 // Fade out function
 function fadeOut(el) {

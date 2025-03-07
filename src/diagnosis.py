@@ -5,7 +5,7 @@ import numpy as np
 from keras.models import load_model, Model
 from keras.preprocessing import image
 from keras import backend as K
-import os, soundfile, tempfile
+import soundfile, tempfile
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
@@ -302,18 +302,33 @@ def process_data(img_data_dict, img_column_dict, keys):
     return data, columns
 if __name__ == '__main__':
     #pass
-    final=execute(["/0b233392-7574-4b16-bb25-45f5e5dcb8dd_0_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_1_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_2_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_3_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_4_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_5_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_6_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_7_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_8_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_9_R",
-                   "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_10_R"
-                   ])
+    
+    # final=execute(["/0b233392-7574-4b16-bb25-45f5e5dcb8dd_0_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_1_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_2_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_3_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_4_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_5_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_6_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_7_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_8_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_9_R",
+    #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_10_R"
+    #                ])
+    final=execute_mel(["../data/fa352139-508c-40bf-a49d-db57de4f4a0b_0",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_1",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_2",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_3",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_4",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_5",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_6",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_7",
+                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_8",
+                    "../data/0b233392-7574-4b16-bb25-45f5e5dcb8dd_9_R",
+                    "../data/0b233392-7574-4b16-bb25-45f5e5dcb8dd_10_R"
+                    ])
+
+
     # final=execute(["/1694758181080_o3uyZ4",
     #                "/1694758250760_vvW2lP",
     #                "/1694758342430_yPKM6v",        

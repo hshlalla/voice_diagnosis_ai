@@ -19,3 +19,19 @@ Release 0.0.002
 
 
 Release 0.0.003
+- css 변경
+- Added a final model that works when only 10 questions are answered.
+- Updated the model loading process to include q10 and q11.
+- Modified the final_classification function to work correctly for both 10-question and 11-question cases.
+- Linked the software version with the web commit version.
+- Changed the diagnosis input format to accept PNG files.
+- Updated classification to normal vs. abnormal 
+- Added sum_dict to individual_score.
+- Limited sum_dict values to 4 decimal places.
+- Fixed an error in sum_dict.values.
+- Corrected the proba value in individual_score.
+- Separated modules for better organization.
+- Created a Mel module for testing.
+- Removed unnecessary commands and simplified complex code.
+- Updated .gitignore file.
+- index html 수정. 
