@@ -1,14 +1,8 @@
-/*!
-* Start Bootstrap - Stylish Portfolio v6.0.6 (https://startbootstrap.com/theme/stylish-portfolio)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-stylish-portfolio/blob/master/LICENSE)
-*/
 window.addEventListener('DOMContentLoaded', event => {
-
     const sidebarWrapper = document.getElementById('sidebar-wrapper');
     let scrollToTopVisible = false;
-    
-    // Closes the sidebar menu
+
+    // 사이드바 메뉴 토글
     const menuToggle = document.body.querySelector('.menu-toggle');
     menuToggle.addEventListener('click', event => {
         event.preventDefault();
@@ -16,29 +10,6 @@ window.addEventListener('DOMContentLoaded', event => {
         _toggleMenuIcon();
         menuToggle.classList.toggle('active');
     });
-
-    // Closes responsive menu when a scroll trigger link is clicked
-    var scrollTriggerList = [].slice.call(document.querySelectorAll('#sidebar-wrapper .js-scroll-trigger'));
-    scrollTriggerList.map(scrollTrigger => {
-        scrollTrigger.addEventListener('click', () => {
-            sidebarWrapper.classList.remove('active');
-            menuToggle.classList.remove('active');
-            _toggleMenuIcon();
-        })
-    });
-
-    function _toggleMenuIcon() {
-        const menuToggleBars = document.body.querySelector('.menu-toggle > .fa-bars');
-        const menuToggleTimes = document.body.querySelector('.menu-toggle > .fa-xmark');
-        if (menuToggleBars) {
-            menuToggleBars.classList.remove('fa-bars');
-            menuToggleBars.classList.add('fa-xmark');
-        }
-        if (menuToggleTimes) {
-            menuToggleTimes.classList.remove('fa-xmark');
-            menuToggleTimes.classList.add('fa-bars');
-        }
-    }
 
     // Scroll to top button appear
     document.addEventListener('scroll', () => {
@@ -56,7 +27,7 @@ window.addEventListener('DOMContentLoaded', event => {
         }
     });
 
-    // Popup 기능 추가
+    // 팝업 기능 추가
     document.getElementById("startButton").addEventListener("click", openPopup);
     document.getElementById("closePopup").addEventListener("click", closePopup);
 });
@@ -77,8 +48,8 @@ function handleFiles(input) {
     const filePreview = document.getElementById('filePreview');
     filePreview.innerHTML = '';
 
-    if (fileList.length > 11) {
-        alert("You can upload up to 11 files.");
+    if (fileList.length !== 11) {
+        alert("Please upload exactly 11 files.");
         input.value = "";
         return;
     }
@@ -93,7 +64,8 @@ async function uploadFiles() {
     const input = document.getElementById("fileInput");
     const fileList = input.files;
 
-    if (fileList.length !== 11) {
+    // 🚨 파일 개수 검증
+    if (!fileList || fileList.length !== 11) {
         alert("Please upload exactly 11 files.");
         return;
     }
@@ -103,39 +75,44 @@ async function uploadFiles() {
         formData.append("fileList", fileList[i]);
     }
 
+    // ⏳ 진행 중 표시 (버튼 비활성화 & 로딩 텍스트 추가)
+    const submitButton = document.querySelector("button[onclick='uploadFiles()']");
+    submitButton.disabled = true;
+    submitButton.innerText = "Uploading...";
+
     try {
-        // Step 1: 먼저 /mel API 호출
-        const melResponse = await fetch("/mel", {
+        // 🛰 서버 요청
+        const response = await fetch("/diagnosis", {
             method: "POST",
-            body: JSON.stringify({ filePath: "some_path", step: 1 }), // 필요한 데이터 추가
-            headers: { "Content-Type": "application/json" }
+            body: formData,
         });
 
-        const melResult = await melResponse.json();
-        console.log("MEL Result:", melResult);
-
-        if (melResult.resultCode !== "0000") {
-            alert("Error in MEL processing");
-            return;
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status} ${response.statusText}`);
         }
 
-        // Step 2: MEL 완료 후 /diagnosis API 호출
-        const diagnosisResponse = await fetch("/diagnosis", {
-            method: "POST",
-            body: formData
-        });
+        const responseData = await response.json();  // 서버 응답을 JSON으로 변환
+        console.log("Diagnosis Response:", responseData);
 
-        const diagnosisResult = await diagnosisResponse.json();
-        document.getElementById("result").innerText = JSON.stringify(diagnosisResult, null, 2);
+        if (responseData.status === "success" && responseData.redirect_url) {
+            window.location.href = responseData.redirect_url;  // 🚀 결과 페이지로 이동
+        } else {
+            throw new Error("Invalid response format from server.");
+        }
 
     } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred during processing.");
+        console.error("Upload Error:", error);
+        alert("An error occurred during processing. Please try again.");
+    } finally {
+        // ⏹ 완료 후 버튼 활성화
+        submitButton.disabled = false;
+        submitButton.innerText = "Submit";
     }
 }
 
 
-// Fade out function
+
+// Fade in/out functions
 function fadeOut(el) {
     el.style.opacity = 1;
     (function fade() {
@@ -145,17 +122,16 @@ function fadeOut(el) {
             requestAnimationFrame(fade);
         }
     })();
-};
+}
 
-// Fade in function
 function fadeIn(el, display) {
     el.style.opacity = 0;
     el.style.display = display || "block";
     (function fade() {
-        var val = parseFloat(el.style.opacity);
+        let val = parseFloat(el.style.opacity);
         if (!((val += .1) > 1)) {
             el.style.opacity = val;
             requestAnimationFrame(fade);
         }
     })();
-};
+}

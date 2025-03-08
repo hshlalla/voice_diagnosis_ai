@@ -1,0 +1,4 @@
+#!/bin/bash
+log_path=/opt/aible/applications/dementia_ai/log
+
+find $log_path -mtime +2 -type f ! -name "dementia.log" -delete

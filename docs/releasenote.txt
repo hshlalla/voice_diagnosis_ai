@@ -1,4 +1,4 @@
-Release 0.0.001
+Release 0.0.0.1
 - Wrapped the diagnostic service with try-catch.
 - Implemented return handling in the diagnostic service.
 - Modified the diagnostic response format.
@@ -6,7 +6,7 @@ Release 0.0.001
 - Responded with diagnostic probability as a percentage rounded to one decimal place.
 - diagnosis.py complete
 
-Release 0.0.002
+Release 0.0.0.2
 - Created a folder for the trained model.
 - Added a 'train' folder and moved training-related code.
 - Built a Flask server for API integration.
@@ -18,7 +18,7 @@ Release 0.0.002
 - Developed a Flask web API.
 
 
-Release 0.0.003
+Release 0.0.0.3
 - main.py complete
 - Added a final model that works when only 10 questions are answered.
 - Updated the model loading process to include q10 and q11.
@@ -37,8 +37,33 @@ Release 0.0.003
 - index.html Modified. 
 - css added
 
-Release 0.0.004
+Release 0.0.0.4
 - Integrated mel spectrogram extraction in JavaScript: Previously executed in two stages, now processed in a single step from audio extraction to feature generation.
 - Completed integration testing in main.py.
 - Updated deprecated libraries to their latest supported versions.
 - Modified JavaScript function calls for improved execution.
+
+
+Release 0.0.0.5
+- Refactored diagnosis.py for improved modularity, readability, and maintainability.
+- Separated model loading logic into a dedicated function.
+- Optimized audio preprocessing to handle various durations more efficiently.
+- Improved exception handling for robustness.
+- Streamlined the final classification process.
+- Fixed an issue where test_result.html was not displaying diagnosis results properly.
+- Updated web.py:
+- Integrated file upload functionality with Flask for smooth API interaction.
+- Fixed JSON serialization errors when passing results to test_result.html.
+- Implemented redirect handling to ensure successful navigation after diagnosis.
+- Improved logging for better debugging.
+- Enhanced front-end:
+- Improved the file upload UI and validation.
+- Added a loading indicator while diagnosis is in progress.
+- Updated Bootstrap styling for a more seamless experience.
+- Addressed a bug where incorrect form submission caused a JavaScript error.
+- Fixed a 404 error for missing assets like bg-masthead.jpg.
+- Improved scripts.js:
+- Separated concerns between UI handling and API communication.
+- Fixed addEventListener errors by ensuring elements are loaded before script execution.
+- Implemented error handling for API failures with proper UI feedback.
+- General performance optimizations and cleanup.

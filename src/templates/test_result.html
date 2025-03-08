@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Convenient Dementia Screening - Diagnose Your Dementia with Your Voice</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css" rel="stylesheet" />
+        <link href="../static/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <a class="menu-toggle rounded" href="#"><i class="fas fa-bars"></i></a>
+        <nav id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#page-top">View Results</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('home') }}">Main</a></li>
+                <li class="sidebar-nav-item"><a href="{{ url_for('test_result') }}">Result</a></li>
+            </ul>
+        </nav>
+        <header class="masthead align-items-center">
+            <div class="wrap">
+                <div class="start"></div>
+                <div class="pageTitle">
+                    <h1>Test Results</h1>
+                </div>
+                <div class="end">
+                    <a href="#" data-bs-dismiss="modal" class="btn btn-text-dark closeButton">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426"
+                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="appContainer bg">
+                    <div class="section h70p">
+                        <div class="testResult">
+                            <div class="row">
+                                <div class="col col-6">
+                                    <h3>결과</h3>
+                                    <p class="result eng">
+                                        {{ result.get("dementiaClass", "결과 없음") }}
+                                    </p>
+                                </div>
+                                <div class="col col-6">
+                                    <h3 class="text-primary">AI 지수</h3>
+                                    <p class="result eng">
+                                        {{ result.get("dementiaProba", "검사결과 없음") }}%
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section h30p">
+                        <div class="testComment">
+                            <div class="row">
+                                <div class="col col-12">
+                                    <div class="comment">
+                                        <p>완료되었습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../static/scripts.js"></script>
+    </body>
+</html>
