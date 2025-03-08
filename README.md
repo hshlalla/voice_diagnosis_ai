@@ -32,7 +32,7 @@
 
 1. Start the server as described above.
 2. Open a web browser and go to:
-- http://<server-ip>:9090
+- http://server-ip:9090
 
 3. Use the provided interface to upload voice files and receive analysis results.
 
