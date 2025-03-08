@@ -1,6 +1,5 @@
 import json, os
 import logging.config
-
 filepath = os.environ['DEMENTIA_CONFIG_FILE']
 json_data = json.loads(open(filepath).read())
 

@@ -9,7 +9,7 @@ app = Flask('dementia')
 logger = configure.getLogger('web')
 
 
-sw_version = 'Release 0.0.002'
+sw_version = 'Release 0.0.004'
 
 
 def as_json(f):
@@ -75,7 +75,8 @@ def request_mel():
     
     resultData = diagnosis.execute_mel(
         file_path=filePath,
-        step=step)
+        step=step,
+        recordFileRoot=configure.recordFileRoot)
     
     if resultData is not None:
         obj_response = resultData

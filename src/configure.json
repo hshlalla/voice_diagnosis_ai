@@ -1,6 +1,6 @@
 {
 	"runtimeName": "LOCAL",
 	"port": 9090,
-	"recordFileRoot": "../data/upload",
+	"recordFileRoot": "../data",
 	"threadcount" : 12
 }

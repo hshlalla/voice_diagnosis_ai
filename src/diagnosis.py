@@ -14,7 +14,6 @@ import configure
 
 logger = configure.getLogger('diagnosis')
 now=datetime.now()
-#time = time.time()
 models = {
     'q3': {
         'final_model':  {
@@ -47,15 +46,7 @@ models = {
     'NOR_AD':  [load_model(os.path.join('models', 'NA', item)) for item in sorted(os.listdir('models/NA'))],
     'NOR_AB':  [load_model(os.path.join('models', 'NAB', item)) for item in sorted(os.listdir('models/NAB'))],
     'NOR_MCI':  [load_model(os.path.join('models', 'NM', item)) for item in sorted(os.listdir('models/NM'))],
-    # #test
-    # 'MCI_AD': [(os.path.join('models', 'MA', item)) for item in sorted(os.listdir('models/MA'))],
-    # 'NOR_AD': [(os.path.join('models', 'NA', item)) for item in sorted(os.listdir('models/NA'))],
-    # 'NOR_AB': [(os.path.join('models', 'NAB', item)) for item in sorted(os.listdir('models/NAB'))],
-    # 'NOR_MCI': [(os.path.join('models', 'NM', item)) for item in sorted(os.listdir('models/NM'))],
 }
-#logger.debug('============ {} ============='.format(time.time() - stime))
-
-#os.makedirs('processing', exist_ok=True)
 
 # voice_cut2 기준(최종 결정 완료)에 따른 문항별 음원 지속 시간
 end_time = [9, 10, 12, 18, 60, 60, 60, 60, 60, 60, 60]
@@ -66,35 +57,7 @@ sr = 48000 # sampling rate
 def imageprocessing(wav_file, save_file, sr):
     Mel_Spectrogram(wav_file, save_file, sr)
     crop_mel(save_file)
-    
-def execute_mel(file_path, step, recordFileRoot):
-    try:
-        step = int(step) - 1
-        
-        mp4_file = os.path.join(recordFileRoot, file_path)
-
-        y, _ = librosa.load(mp4_file, sr=48000)
-        
-        duration = len(y)/48000
-
-        temp_file = tempfile.NamedTemporaryFile(suffix='.wav', delete=True).name
-        if (end_time[step] > duration):
-            final_duration=end_time[step]*sr
-            y2 = np.concatenate((y, np.zeros(abs(final_duration-len(y)))), axis=0)
-
-
-        else:
-            cutDuration = sr * end_time[step]
-            y2 = y[:cutDuration]
-
-
-        soundfile.write(temp_file, y2, sr, format='WAV')
-
-        imageprocessing(temp_file, "{}.png".format(mp4_file), sr)
-    except Exception as ex:
-        result = {"resultCode": "9999", "msg": '{}: {}'.format(type(ex).__name__, str(ex))}
-        
-        return result
+  
     
 def execute(fileList: list):
     '''
@@ -137,13 +100,33 @@ def execute(fileList: list):
 
     # 여기서 수정해야함.모델이 11개 로드되는 포문이므로 10번문제가 빠졌을때 11번 문제가 10번 모델에 적용됨.
             for step_no, seq in enumerate(models['q{}'.format(len(fileList))]['seq']):
-                ##테스트 할때만 사용
-                # loaded_model = load_model(models[model_class][seq-1])
-                #원본
                 loaded_model = models[model_class][seq - 1]
+                
+                mp4_file = os.path.join(configure.recordFileRoot,fileList[step_no])
+                
+                y, _ = librosa.load(mp4_file, sr=48000)
+                
+                duration = len(y)/48000
 
-                img_name = os.path.join(configure.recordFileRoot, "{}.png".format(fileList[step_no][1:]))
-                feature_set, features_column, processed_img = feature_extract(loaded_model, seq, img_name)
+                temp_file = tempfile.NamedTemporaryFile(suffix='.wav', delete=True).name
+                if (end_time[step_no] > duration):
+                    final_duration=end_time[step_no]*sr
+                    y2 = np.concatenate((y, np.zeros(abs(final_duration-len(y)))), axis=0)
+
+
+                else:
+                    cutDuration = sr * end_time[step_no]
+                    y2 = y[:cutDuration]
+                
+
+
+                soundfile.write(temp_file, y2, sr, format='WAV')
+
+                imageprocessing(temp_file, "{}.png".format(mp4_file), sr)
+                        
+
+                img_name = os.path.join(configure.recordFileRoot, "{}.png".format(fileList[step_no]))
+                feature_set, features_column,  = feature_extract(loaded_model, seq, img_name)
                 
                 K.clear_session()
                 #디버그 툴로 꼭 확인할것 문제 제거시 실수 확율 매우 높음)
@@ -151,9 +134,6 @@ def execute(fileList: list):
                 img_columns_array["col" + str(seq-1)] = features_column
 
             final_df = final_classification(img_data_array, img_columns_array, ques_no= len(fileList))
-
-#            final_df.to_csv('{}.csv'.format(model_class))
-#            pred = models['final_model'][model_class].predict(final_df)
 
             dementia_proba2 = models["q{}".format(len(fileList))]['final_model'][model_class].predict(final_df)[0,0]
             dementia_proba1 = 1 - dementia_proba2
@@ -177,28 +157,11 @@ def execute(fileList: list):
         sum_dict = {k: sum(v) for k, v in result_proba_list_dict.items()}
 
         individualScore={"classScore":result_proba_dict, "sum_dict":{k:int(v*1000/3)/1000 for k,v in sum_dict.items()}}
-
-        
-        # 식약처 인증후 점수 산정방법 변경하였음. normal vs abnormal(MCI+AD).
-        #"sum_dict": {"AD": 0.2915666898091634, "NOR": 0.3684277335802714, "MCI": 0.8182206352551779}
-        if sum_dict["NOR"]>(sum_dict["AD"]+sum_dict["MCI"]):
-            dementia_class="NOR"
-            dementia_proba= sum_dict["NOR"]
-        elif sum_dict["MCI"]>sum_dict["AD"]:
-            dementia_class="MCI"
-            dementia_proba= sum_dict["MCI"]
-        else:
-            dementia_class="AD"
-            dementia_proba= sum_dict["AD"]
-
-
-            #dementia_class="AB"
-            #dementia_proba= (sum_dict["MCI"]+sum_dict["AD"])/sum(sum_dict.values())
-            
+           
         #"AD"와 "MCI"를 더한값과 normal을 비교하게 되서 아래 MAX로 dementia_class를 정하는 방식은 주석처리
-        #dementia_class = max(sum_dict, key=sum_dict.get)
+        dementia_class = max(sum_dict, key=sum_dict.get)
         #식약처 normal vs abnormal 표현으로 바꾸기 위해서 dementia_proba 변경
-        #dementia_proba = sum_dict[dementia_class] / len(result_proba_list_dict[dementia_class])
+        dementia_proba = sum_dict[dementia_class] / len(result_proba_list_dict[dementia_class])
         individualScore['proba'] = int(sum_dict[dementia_class]*1000 / len(result_proba_list_dict[dementia_class])) / 10
 
         results = dict(
@@ -211,7 +174,6 @@ def execute(fileList: list):
 
         return results
         
-    #    logger.debug('{}'.format(time.time() - stime))
     except Exception as ex:
         logger.exception('')
         result = {"resultCode": "9999", "msg": '{}: {}'.format(type(ex).__name__, str(ex))}
@@ -230,7 +192,7 @@ def feature_extract(loaded_model, step_num, img_path):
     feature_set = test_model.predict(img_tensor)
     features_column = [f"img_f{i}_{step_num}" for i in range(feature_set.shape[1])]
 
-    return feature_set, features_column, img_tensor
+    return feature_set, features_column
 
 
 def final_classification(img_data, img_column, ques_no=11):
@@ -301,6 +263,7 @@ def process_data(img_data_dict, img_column_dict, keys):
     columns = np.hstack([img_column_dict[key.replace("data", "col")] for key in keys])
     return data, columns
 if __name__ == '__main__':
+        
     #pass
     
     # final=execute(["/0b233392-7574-4b16-bb25-45f5e5dcb8dd_0_R",
@@ -315,18 +278,8 @@ if __name__ == '__main__':
     #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_9_R",
     #                "/0b233392-7574-4b16-bb25-45f5e5dcb8dd_10_R"
     #                ])
-    final=execute_mel(["../data/fa352139-508c-40bf-a49d-db57de4f4a0b_0",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_1",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_2",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_3",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_4",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_5",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_6",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_7",
-                    "../data/fa352139-508c-40bf-a49d-db57de4f4a0b_8",
-                    "../data/0b233392-7574-4b16-bb25-45f5e5dcb8dd_9_R",
-                    "../data/0b233392-7574-4b16-bb25-45f5e5dcb8dd_10_R"
-                    ])
+    final=execute(["fa352139-508c-40bf-a49d-db57de4f4a0b_0.wav","fa352139-508c-40bf-a49d-db57de4f4a0b_1.wav",
+                   "fa352139-508c-40bf-a49d-db57de4f4a0b_2.wav"])
 
 
     # final=execute(["/1694758181080_o3uyZ4",

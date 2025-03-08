@@ -19,7 +19,7 @@ Release 0.0.002
 
 
 Release 0.0.003
-- css 변경
+- main.py complete
 - Added a final model that works when only 10 questions are answered.
 - Updated the model loading process to include q10 and q11.
 - Modified the final_classification function to work correctly for both 10-question and 11-question cases.
@@ -31,7 +31,14 @@ Release 0.0.003
 - Fixed an error in sum_dict.values.
 - Corrected the proba value in individual_score.
 - Separated modules for better organization.
-- Created a Mel module for testing.
+- main.py Created a Mel module for testing.
 - Removed unnecessary commands and simplified complex code.
 - Updated .gitignore file.
-- index html 수정. 
+- index.html Modified. 
+- css added
+
+Release 0.0.004
+- Integrated mel spectrogram extraction in JavaScript: Previously executed in two stages, now processed in a single step from audio extraction to feature generation.
+- Completed integration testing in main.py.
+- Updated deprecated libraries to their latest supported versions.
+- Modified JavaScript function calls for improved execution.
