@@ -8,7 +8,7 @@ app.secret_key = 'gkdlekql3#'  # Secret Key
 
 logger = configure.getLogger('web')
 
-sw_version = 'Release 0.0.005'  # 
+sw_version = 'Release 0.0.006' 
 
 @app.route('/')
 def home():

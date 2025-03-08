@@ -1,18 +1,40 @@
 # English
-- voice_diagnosis_api/src/model - The model required for inference  
-- voice_diagnosis_api/docs - Code history that needs version control  
-- voice_diagnosis_api/modules - Various necessary modules  
-- The model is not uploaded to Git due to its size. Please place the model folder inside the src folder.  
-- Use local_test_diagnosis for testing.  
 
-model downlink
-https://webhard.aible.kro.kr/share/HWzw9BCG
+## Folder Structure
 
-# Korean
-- voice_diagnosis_api/src/model 추론에 필요한 모델
-- voice_diagnosis_api/docs 형상관리 필요한 코드이력
-- voice_diagnosis_api/modules 필요한 여러가지 모듈
-- 모델은 용량관계로 git에 업로드 하지 않았습니다. 모델폴더를 src 폴더에 넣어주세요.
-- 테스트할때 local_test_giagnosis를 사용할것.
+**voice_diagnosis_api (Root Directory)**
+
+- `/data` - Stores data files.
+- `/docs` - Code history requiring version control.
+- `/src` - Contains all source code, including Python scripts and web-related files.
+  - Docker setup available for environment installation.
+  - Includes Python files: `web.py`, `diagnosis.py`, `main.py`, `configure.py`, `utils.py`.
+  - `models` folder - Place the downloaded model files here.
+  - `static` & `templates` folders - Related to the web interface.
+- `/train` - Contains training scripts for model creation.
+
+## Model Information
+
+- The model required for inference is **not uploaded to Git** due to its size.
+- Please place the **model folder inside the `src/models` directory**.
+
+## How to Use the API
+
+1. Start the Flask web server:
+   ```bash
+   cd src 
+   python main.py
+2. Access the API endpoints:
+- Upload and analyze audio files via the /diagnosis endpoint.
+- Check the API version via the /version endpoint.
+
+## How to Access via Web Browser
+
+1. Start the server as described above.
+2. Open a web browser and go to:
+- http://<server-ip>:9090
+
+3. Use the provided interface to upload voice files and receive analysis results.
+
 model downlink
 https://webhard.aible.kro.kr/share/HWzw9BCG

@@ -67,3 +67,6 @@ Release 0.0.0.5
 - Fixed addEventListener errors by ensuring elements are loaded before script execution.
 - Implemented error handling for API failures with proper UI feedback.
 - General performance optimizations and cleanup.
+
+Release 0.0.0.6
+- add readme.md
